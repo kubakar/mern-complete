@@ -47,7 +47,6 @@ app.use("/api/v1/users", authenticate, userRouter);
 // CLIENT APP ROUTING...
 // route all GET request to client app so they are handled by React Router
 app.get("*", (req: Request, res: Response) =>
-  // */
   res.sendFile(path.resolve(__dirname, "../public", "index.html"))
 );
 
