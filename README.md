@@ -6870,4 +6870,4 @@ router.post("/register", apiLimiter, validateRegisterInput, register);
 router.post("/login", apiLimiter, validateLoginInput, login);
 ```
 
-// setup test
+// setup test [remote]
