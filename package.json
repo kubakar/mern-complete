@@ -8,10 +8,13 @@
     "build": "tsc",
     "build-w": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
+    "start": "node dist/server.js",
     "dev": "nodemon dist/server.js",
     "devwatch": "npm run dev & npm run build-w",
-    "setup-project": "npm i && cd client && npm i"
+    "setup-project": "npm i && cd client && npm i",
+    "build-back": "npm i && npm run build",
+    "build-front": "cd client && npm i && npm run build",
+    "build-all": "npm run build-back && npm run build-front"
   },
   "author": "kubakar",
   "license": "ISC",
