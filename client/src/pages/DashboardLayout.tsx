@@ -2,19 +2,20 @@ import {
   Outlet,
   useLoaderData,
   useNavigate,
-  // useNavigation,
+  useNavigation,
 } from "react-router-dom";
 import styled from "@emotion/styled";
 
 import BigSideBar from "../components/BigSidebar";
 import Navbar from "../components/Navbar";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Modal from "../components/Modal";
 import NavLinks from "../components/NavLinks";
 import { toast } from "react-toastify";
 import axios, { isAxiosError } from "axios";
 import Logo from "../components/Logo";
 import { User } from "../../../src/utils/constants";
+import Loading from "../components/Loading";
 
 const Wrapper = styled.section`
   .dashboard {
@@ -63,11 +64,13 @@ const DashboardLayout: React.FC = () => {
   const { role } = user;
 
   const [sideBarVisible, showSideBar] = useState<boolean>(true);
+  const [isAuthError, setIsAuthError] = useState<boolean>(false);
   const toggleSideBar = useCallback(() => showSideBar((prev) => !prev), []);
   const navigate = useNavigate();
 
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   // const isPageIdle = navigation.state === "idle";
+  const isPageLoading = navigation.state === "loading"; // another type is 'submit'
 
   // only proceed with valid user - extra safety
   // if (user == null) throw new Error("No user");
@@ -76,6 +79,25 @@ const DashboardLayout: React.FC = () => {
     await logout();
     navigate("/");
   };
+
+  // REWORK THIS INTO CUSTOM HOOK !!
+  // TEST
+  // setup axios interceptors
+  axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error?.response?.status === 401) {
+        console.log("!! AUTH ERROR !!");
+        // logoutUser();
+        setIsAuthError(true);
+      }
+      return Promise.reject(error);
+    }
+  );
+
+  useEffect(() => {
+    if (isAuthError) logoutUser();
+  }, [isAuthError]);
 
   return (
     <Wrapper>
@@ -99,13 +121,9 @@ const DashboardLayout: React.FC = () => {
           />
           <div className="dashboard-page">
             {/* handling loading spinner globally */}
-
-            {/* {!isPageIdle ? (
-              <h1>{navigation.state} ...</h1>
-            ) : (
-              <Outlet context={{ user }} />
-            )} */}
-            <Outlet context={{ user }} />
+            {/* sth different has to be introduced eg. overlay, so main content is still rendered */}
+            {isPageLoading ? <Loading /> : <Outlet context={{ user }} />}
+            {/* <Outlet context={{ user }} /> */}
           </div>
         </div>
       </main>

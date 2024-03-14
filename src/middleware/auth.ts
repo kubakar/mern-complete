@@ -59,7 +59,7 @@ export const authenticate: RequestHandler = (req, res, next) => {
   try {
     // decode
     const payload = jwt.verify(token, process.env.JWT_SECRET as string);
-    console.log("decoded JWT", payload);
+    // console.log("decoded JWT", payload);
 
     // add user to req
     req.user = {

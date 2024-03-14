@@ -17,7 +17,7 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    outDir: "../public", // directly into server's public folder
-  },
+  // build: {
+  //   outDir: "../public", // directly into server's public folder
+  // },
 });

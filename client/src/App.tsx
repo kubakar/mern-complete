@@ -33,7 +33,7 @@ const actionHandler = async (
     // return successReturn;
     return successReturn ?? apiResponse;
   } catch (error) {
-    console.error(error);
+    console.error("error", error);
 
     if (isAxiosError(error)) {
       const errorResponse = error.response?.data;
@@ -47,7 +47,7 @@ const actionHandler = async (
 const addJobAction: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
-  console.log(data);
+  console.log("addJobAction", data);
 
   return await actionHandler(
     () => axios.post("/api/v1/jobs", data),
@@ -178,7 +178,8 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout />,
-    errorElement: <Error />,
+    errorElement: <Error />, // this is above dashboard!
+    // errorElement within dashboard would be better
     children: [
       { index: true, element: <Landing /> }, // default page
       {
@@ -196,7 +197,12 @@ const router = createBrowserRouter([
         loader: getUserLoader, // getting user is only used to pass user data to subpages (no extra auth logic)
         children: [
           { index: true, element: <AddJob />, action: addJobAction },
-          { path: "stats", element: <Stats />, loader: statsLoader },
+          {
+            path: "stats",
+            element: <Stats />,
+            loader: statsLoader,
+            // errorElement: <h4>Stats page error</h4>, // error can be intercepted directly at this page level
+          },
           {
             path: "all-jobs",
             element: <AllJobs />,

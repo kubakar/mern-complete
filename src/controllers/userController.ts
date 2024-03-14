@@ -34,8 +34,6 @@ export const updateUser: RequestHandler<object, object, UserInterface> = async (
 
   const { password, role, ...newUserSafeData } = body; // skip password & role
 
-  console.log(newUserSafeData);
-
   const updatedUser = await User.findByIdAndUpdate(
     user.userId,
     newUserSafeData,

@@ -33,7 +33,7 @@ app.use(cookieParser());
 
 // handle static files + client app - extra code in order to handle ES6 modules
 const __dirname = dirname(fileURLToPath(import.meta.url));
-app.use(express.static(path.resolve(__dirname, "../public"))); // same relative as from 'dist' folder - OK
+app.use(express.static(path.resolve(__dirname, "../client/dist"))); // same relative as from 'dist' folder - OK
 
 // TEST
 app.get("/api/v1/test", (req, res) => {
@@ -47,7 +47,7 @@ app.use("/api/v1/users", authenticate, userRouter);
 // CLIENT APP ROUTING...
 // route all GET request to client app so they are handled by React Router
 app.get("*", (req: Request, res: Response) =>
-  res.sendFile(path.resolve(__dirname, "../public", "index.html"))
+  res.sendFile(path.resolve(__dirname, "../client/dist", "index.html"))
 );
 
 // error middleware
